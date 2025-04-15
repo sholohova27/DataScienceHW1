@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    build: .
+    environment:
+      - IS_DOCKER=true
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./../.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    env_file:
+      - ./../.env
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:
